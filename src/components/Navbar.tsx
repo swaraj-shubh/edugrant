@@ -31,6 +31,7 @@ export default function Navbar() {
             
             <div className="h-6 w-px bg-[#4A4238] mx-2"></div> {/* Divider */}
             
+            <Link href="/donor/dashboard" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#A38A63] transition-all">My Donations</Link>
             <Link href="/admin/dashboard" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#A38A63] transition-all">Admin Data</Link>
             <Link href="/student/dashboard" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#A38A63] transition-all">Student Data</Link>
           </div>

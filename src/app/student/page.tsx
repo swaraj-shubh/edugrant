@@ -1,179 +1,202 @@
 "use client";
-import { useState } from 'react';
-import { ethers } from 'ethers';
+import { useState, useEffect } from 'react';
+import { ethers, EventLog } from 'ethers';
 import ContractABI from '@/contracts/EduGrantVault.json';
 import { useWallet } from '@/context/WalletContext';
 
-export default function StudentDashboard() {
-  const { account, signer } = useWallet(); // Get global MetaMask connection
+export default function StudentSpendPage() {
+  const { account, signer } = useWallet();
+  const [allowance, setAllowance] = useState('0');
+  const [vendors, setVendors] = useState<string[]>([]);
   const [vendorAddress, setVendorAddress] = useState('');
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState('');
 
+  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!;
+
+  // Fetch student's allowance
+  const fetchAllowance = async () => {
+    if (!signer || !account) return;
+    try {
+      const contract = new ethers.Contract(contractAddress, ContractABI.abi, signer);
+      const bal = await contract.studentAllowances(account);
+      setAllowance(ethers.formatUnits(bal, 6));
+    } catch (err) {
+      console.error("Failed to fetch allowance", err);
+    }
+  };
+
+  // Fetch approved vendors from events (simplified: full fetch from block 0)
+  const fetchVendors = async () => {
+    if (!signer) return;
+    try {
+      const contract = new ethers.Contract(contractAddress, ContractABI.abi, signer);
+      const provider = signer.provider;
+      const currentBlock = await provider.getBlockNumber();
+      const filter = contract.filters.VendorStatusUpdated();
+      const events = (await contract.queryFilter(filter, 0, currentBlock)) as EventLog[];
+      const vendorMap = new Map<string, boolean>();
+      for (const ev of events) {
+        vendorMap.set(ev.args[0], ev.args[1]);
+      }
+      const approved = Array.from(vendorMap.entries())
+        .filter(([, approved]) => approved === true)
+        .map(([addr]) => addr);
+      setVendors(approved);
+    } catch (err) {
+      console.error("Failed to fetch vendors", err);
+    }
+  };
+
   const handleSpend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!signer) {
-      setStatus("Error: Please connect your MetaMask wallet via the Navbar first.");
+      setStatus("Please connect your wallet.");
       return;
     }
-
+    if (!vendorAddress || !amount) {
+      setStatus("Please fill all fields.");
+      return;
+    }
     setLoading(true);
-    setStatus('Please approve the transaction in MetaMask...');
-
+    setStatus("Sending transaction...");
     try {
-      const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!;
-      
-      // Create a contract instance securely connected to the user's MetaMask
       const contract = new ethers.Contract(contractAddress, ContractABI.abi, signer);
-
-      // Execute the purchase directly from the browser!
-      const tx = await contract.spendGrant(vendorAddress, amount);
-      setStatus('Transaction submitted. Waiting for confirmation...');
-      
-      const receipt = await tx.wait();
-      
-      setStatus(`Payment Successful! Tx Hash: ${receipt.hash}`);
+      const amountWithDecimals = ethers.parseUnits(amount, 6);
+      const tx = await contract.spendGrant(vendorAddress, amountWithDecimals);
+      await tx.wait();
+      setStatus(`✅ Paid ${amount} USDC to vendor. Tx: ${tx.hash.slice(0,10)}...`);
       setVendorAddress('');
       setAmount('');
-      
+      await fetchAllowance(); // refresh balance
     } catch (err: any) {
       console.error(err);
-      if (err.message.includes("Vendor is not approved")) {
-        setStatus("Payment Failed: Vendor is not approved by the University.");
+      if (err.message.includes("Vendor not approved")) {
+        setStatus("❌ Vendor is not approved by the university.");
       } else if (err.message.includes("Insufficient allowance")) {
-        setStatus("Payment Failed: Insufficient grant allowance.");
+        setStatus("❌ You don't have enough allowance.");
       } else {
-        setStatus('Transaction rejected or failed.');
+        setStatus("❌ Transaction failed.");
       }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  return (
-    <div className="min-h-screen bg-[#FDFCF8] py-12 px-4 sm:px-6 flex flex-col items-center">
-      
-      {/* APP CARD / "PHONE" CONTAINER */}
-      <div className="w-full max-w-sm bg-white rounded-[2.5rem] shadow-[0_20px_60px_rgb(74,66,56,0.06)] overflow-hidden border-4 sm:border-[8px] border-[#FAFAF7] pb-8 ring-1 ring-[#EBE6E0]">
-        
-        {/* HEADER SECTION */}
-        <div className="bg-gradient-to-br from-[#4A4238] to-[#363028] p-8 text-[#FDFCF8] text-center rounded-b-[2.5rem] mb-8 shadow-sm relative overflow-hidden group">
-          {/* Background decoration */}
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white opacity-5 rounded-full blur-3xl group-hover:opacity-10 transition-opacity duration-700"></div>
-          
-          <div className="w-14 h-14 bg-[#FDFCF8]/10 rounded-2xl flex items-center justify-center mx-auto mb-5 backdrop-blur-sm border border-[#FDFCF8]/10">
-            <svg className="w-7 h-7 text-[#D6CEC4]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-          </div>
+  useEffect(() => {
+    if (signer && account) {
+      fetchAllowance();
+      fetchVendors();
+    }
+  }, [signer, account]);
 
-          <p className="text-[#D6CEC4] text-xs font-bold tracking-[0.2em] uppercase mb-1.5">My EduWallet</p>
-          <h2 className="text-3xl font-black tracking-tight">Virtual ID</h2>
-          
-          {/* Connection Status Badge */}
-          <div className="mt-5 inline-flex items-center gap-2.5 bg-[#2A251E]/60 px-4 py-2 rounded-full border border-[#5C5346]/50 backdrop-blur-md">
-            {account ? (
-              <>
-                <span className="w-2 h-2 rounded-full bg-[#7A9C59] animate-pulse"></span>
-                <span className="text-xs font-mono text-[#EBE6E0]">Connected: {account.substring(0,6)}...</span>
-              </>
-            ) : (
-              <>
-                <span className="w-2 h-2 rounded-full bg-[#9E473F]"></span>
-                <span className="text-xs font-medium text-[#D6CEC4]">Wallet Disconnected</span>
-              </>
-            )}
+  const formatAddr = (addr: string) => `${addr.slice(0,6)}...${addr.slice(-4)}`;
+
+  if (!account) {
+    return (
+      <div className="min-h-screen bg-[#FDFCF8] flex items-center justify-center">
+        <div className="bg-white p-10 rounded-2xl shadow-sm border max-w-md text-center">
+          <h2 className="text-2xl font-bold text-[#4A4238] mb-2">Connect Wallet</h2>
+          <p className="text-[#8C8276]">Please connect your student wallet.</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6">
+      <div className="max-w-4xl mx-auto">
+        {/* Header + Balance */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div>
+            <h1 className="text-3xl font-extrabold text-[#4A4238]">Student Portal</h1>
+            <p className="text-[#8C8276] mt-1">Spend your education grant at approved vendors.</p>
+          </div>
+          <div className="bg-white px-6 py-3 rounded-full border border-[#EBE6E0] shadow-sm">
+            <span className="text-sm text-[#4A4238]">Your Allowance:</span>
+            <span className="ml-2 text-2xl font-bold text-[#A38A63]">{allowance} USDC</span>
           </div>
         </div>
 
-        {/* FORM SECTION */}
-        <div className="px-7">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-[#F5F0E6] rounded-lg text-[#A38A63]">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Spend Form */}
+          <div className="bg-white p-8 rounded-[2rem] shadow-md border border-[#EBE6E0]">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 bg-[#F5F0E6] rounded-xl text-[#A38A63]">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+              </div>
+              <h2 className="text-xl font-bold text-[#4A4238]">Pay a Vendor</h2>
             </div>
-            <h3 className="text-[#4A4238] font-extrabold text-lg">Pay a Shopkeeper</h3>
-          </div>
-          
-          <form onSubmit={handleSpend} className="flex flex-col gap-5">
-            
-            {/* VENDOR INPUT */}
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-bold text-[#8C8276] uppercase tracking-wider ml-1">Vendor Address</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#D6CEC4]">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                </div>
-                <input 
-                  type="text" 
+            <form onSubmit={handleSpend} className="space-y-5">
+              <div>
+                <label className="text-xs font-bold uppercase text-[#8C8276]">Vendor Address</label>
+                <input
+                  type="text"
                   value={vendorAddress}
                   onChange={(e) => setVendorAddress(e.target.value)}
                   placeholder="0x..."
-                  className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-[#FAFAF7] border border-[#EBE6E0] text-[#4A4238] font-mono text-sm focus:border-[#A38A63] focus:ring-4 focus:ring-[#A38A63]/10 outline-none transition-all placeholder-[#D6CEC4]"
+                  className="w-full px-4 py-3 mt-1 bg-[#FAFAF7] border border-[#EBE6E0] rounded-xl font-mono focus:border-[#A38A63] outline-none"
                   required
                 />
               </div>
-            </div>
-
-            {/* AMOUNT INPUT */}
-            <div className="space-y-1.5">
-              <label className="text-[11px] font-bold text-[#8C8276] uppercase tracking-wider ml-1">Amount to Spend (USDC)</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#D6CEC4]">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                </div>
-                <input 
-                  type="number" 
+              <div>
+                <label className="text-xs font-bold uppercase text-[#8C8276]">Amount (USDC)</label>
+                <input
+                  type="number"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  placeholder="0.00"
+                  placeholder="e.g. 50"
                   min="1"
-                  className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-[#FAFAF7] border border-[#EBE6E0] text-[#4A4238] font-bold focus:border-[#A38A63] focus:ring-4 focus:ring-[#A38A63]/10 outline-none transition-all placeholder-[#D6CEC4]"
+                  className="w-full px-4 py-3 mt-1 bg-[#FAFAF7] border border-[#EBE6E0] rounded-xl font-bold focus:border-[#A38A63] outline-none"
                   required
                 />
               </div>
-            </div>
-            
-            {/* SUBMIT BUTTON */}
-            <button 
-              type="submit" 
-              disabled={loading || !account}
-              className="mt-3 w-full bg-[#A38A63] text-white font-bold py-4 rounded-xl hover:bg-[#8F7856] shadow-md shadow-[#A38A63]/20 hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:active:scale-100 flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <svg className="w-5 h-5 animate-spin text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                  Processing...
-                </>
-              ) : !account ? (
-                'Connect Wallet First'
-              ) : (
-                'Pay via Smart Contract'
-              )}
-            </button>
-          </form>
-
-          {/* STATUS ALERTS */}
-          {status && (
-            <div className={`mt-6 p-4 rounded-xl text-sm font-medium border flex gap-3 ${
-              status.includes('Success') 
-                ? 'bg-[#EDF2EA] text-[#5C7A43] border-[#CDE0C0]' 
-                : status.includes('Error') || status.includes('Failed') || status.includes('rejected') 
-                  ? 'bg-[#FDF2F2] text-[#9E473F] border-[#F2D6D6]' 
-                  : 'bg-[#F5F0E6] text-[#A38A63] border-[#EBE6E0]'
-            }`}>
-              <div className="shrink-0 mt-0.5">
-                {status.includes('Success') ? (
-                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                ) : status.includes('Error') || status.includes('Failed') || status.includes('rejected') ? (
-                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                ) : (
-                   <svg className="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                )}
+              <button
+                type="submit"
+                disabled={loading || !account}
+                className="w-full bg-[#7A9C59] text-white font-bold py-3 rounded-xl hover:bg-[#5C7A43] transition disabled:opacity-50"
+              >
+                {loading ? "Processing..." : "Pay with Grant"}
+              </button>
+            </form>
+            {status && (
+              <div className={`mt-5 p-3 rounded-xl text-sm border ${
+                status.includes('✅') ? 'bg-green-50 text-green-700 border-green-200' :
+                status.includes('❌') ? 'bg-red-50 text-red-700 border-red-200' : 'bg-blue-50 text-blue-700 border-blue-200'
+              }`}>
+                {status}
               </div>
-              <span className="break-all">{status}</span>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
+          {/* Approved Vendors List */}
+          <div className="bg-white p-8 rounded-[2rem] shadow-md border border-[#EBE6E0]">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 bg-[#F0EDE6] rounded-xl text-[#7A7165]">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+              </div>
+              <h2 className="text-xl font-bold text-[#4A4238]">Approved Vendors</h2>
+            </div>
+            {vendors.length === 0 ? (
+              <p className="text-[#8C8276] text-center py-6">No approved vendors yet.</p>
+            ) : (
+              <ul className="space-y-3">
+                {vendors.map(v => (
+                  <li key={v} className="flex justify-between items-center p-3 bg-[#FAFAF7] rounded-xl border">
+                    <span className="font-mono text-sm">{formatAddr(v)}</span>
+                    <button
+                      onClick={() => setVendorAddress(v)}
+                      className="text-xs bg-[#EDF2EA] px-3 py-1 rounded-full text-[#5C7A43] hover:bg-[#CDE0C0]"
+                    >
+                      Use
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
