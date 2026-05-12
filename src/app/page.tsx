@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, useAnimation, useInView } from 'framer-motion';
+import Image from 'next/image';
 
 // Scroll animation wrapper
 const AnimatedSection = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
@@ -34,8 +35,24 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#FDFCF8] overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative pt-20 pb-32 px-4 sm:px-6 lg:px-8">
-        {/* Decorative background blobs */}
+      <section className="relative pt-20 pb-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Background Icon – large, faded, centered */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="relative w-full h-full max-w-6xl mx-auto">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Image
+                src="/icon2.png"
+                alt=""
+                width={800}
+                height={800}
+                className="opacity-[0.08] blur-sm scale-150 object-contain"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative background blobs – kept but optional */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#A38A63]/10 rounded-full blur-3xl" />
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#7A9C59]/10 rounded-full blur-3xl" />
@@ -49,19 +66,41 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
+            {/* Small animated icon (optional, remove if you want only background) */}
+            <div className="flex justify-center mb-6">
+              <motion.div
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                className="relative"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-[#A38A63]/20 to-[#7A9C59]/20 rounded-full blur-xl" />
+                <Image
+                  src="/icon2.png"
+                  alt="EduGrant Icon"
+                  width={80}
+                  height={80}
+                  className="relative z-10 drop-shadow-lg"
+                />
+              </motion.div>
+            </div>
+
             <div className="inline-flex items-center gap-2 bg-white/60 backdrop-blur-sm border border-[#EBE6E0] rounded-full px-4 py-1.5 mb-6 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#7A9C59] animate-pulse"></span>
               <span className="text-xs font-medium text-[#5C7A43]">Blockchain Powered · Fraud Proof</span>
             </div>
+            
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-[#4A4238] mb-6">
               Smart Wallet for
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#A38A63] to-[#7A9C59] block mt-2">
                 Educational Grants
               </span>
             </h1>
+            
             <p className="text-xl text-[#8C8276] max-w-2xl mx-auto mb-10 leading-relaxed">
               EduGrant replaces broken trust with smart contracts. Programmable wallets ensure every rupee reaches the right student & university — instantly, transparently, and fraud‑free.
             </p>
+            
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/donor">
                 <motion.button
