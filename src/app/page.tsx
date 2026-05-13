@@ -45,6 +45,7 @@ export default function Home() {
                 alt=""
                 width={800}
                 height={800}
+                style={{ width: 'auto', height: 'auto' }}
                 className="opacity-[0.08] blur-sm scale-150 object-contain"
                 priority
               />
@@ -80,6 +81,7 @@ export default function Home() {
                   alt="EduGrant Icon"
                   width={80}
                   height={80}
+                  style={{ width: 'auto', height: 'auto' }}
                   className="relative z-10 drop-shadow-lg"
                 />
               </motion.div>

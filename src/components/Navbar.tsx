@@ -20,6 +20,7 @@ export default function Navbar() {
               alt="EduGrant Logo"
               width={32}
               height={32}
+              style={{ width: 'auto', height: 'auto' }}
               className="drop-shadow-md group-hover:scale-105 transition-transform"
             />
             <span className="font-extrabold text-2xl text-[#FDFCF8] tracking-tight">
@@ -32,12 +33,14 @@ export default function Navbar() {
             <Link href="/donor" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#FDFCF8] transition-all">Donor Portal</Link>
             <Link href="/student" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#FDFCF8] transition-all">Student App</Link>
             <Link href="/admin" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#FDFCF8] transition-all">Admin</Link>
+            <Link href="/vendor" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#FDFCF8] transition-all">Vendor Portal</Link>
             
             <div className="h-6 w-px bg-[#4A4238] mx-2"></div> {/* Divider */}
             
             <Link href="/donor/dashboard" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#A38A63] transition-all">My Donations</Link>
-            <Link href="/admin/dashboard" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#A38A63] transition-all">Admin Data</Link>
             <Link href="/student/dashboard" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#A38A63] transition-all">Student Data</Link>
+            <Link href="/admin/dashboard" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#A38A63] transition-all">Admin Data</Link>
+            <Link href="/vendor/dashboard" className="px-4 py-2 rounded-xl hover:bg-[#363028] hover:text-[#A38A63] transition-all">Vendor Data</Link>
           </div>
 
           {/* WALLET BUTTON */}

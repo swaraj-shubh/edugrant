@@ -7,7 +7,7 @@ import { WalletProvider } from "@/context/WalletContext"; // NEW: Import Provide
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "EduGrant | Programmable Scholarships",
+  title: "EduGrant",
   description: "Fraud-proof education funding powered by Blockchain and AI.",
 };
 
