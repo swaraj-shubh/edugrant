@@ -22,7 +22,9 @@ export default function RootLayout({
         {/* NEW: Wrap Navbar and Children in WalletProvider */}
         <WalletProvider>
           <Navbar />
-          {children}
+          <main className="pt-20">
+            {children}
+          </main>
         </WalletProvider>
       </body>
     </html>

@@ -165,7 +165,7 @@ export default function AdminDashboardData() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold text-[#4A4238] tracking-tight">Global Overview</h1>
+            <h1 className="text-3xl font-extrabold text-[#4A4238] tracking-tight">Admin Panel</h1>
             <p className="text-[#8C8276] mt-1 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#7A9C59] animate-pulse"></span>
               Live on-chain statistics from Sepolia
