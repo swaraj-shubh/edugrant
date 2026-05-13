@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { ethers, EventLog } from 'ethers';
 import ContractABI from '@/contracts/EduGrantVault.json';
 import { useWallet } from '@/context/WalletContext';
+import Link from 'next/link';
 
 export default function StudentSpendPage() {
   const { account, signer } = useWallet();
@@ -113,9 +114,53 @@ export default function StudentSpendPage() {
             <h1 className="text-3xl font-extrabold text-[#4A4238]">Student Portal</h1>
             <p className="text-[#8C8276] mt-1">Spend your education grant at approved vendors.</p>
           </div>
-          <div className="bg-white px-6 py-3 rounded-full border border-[#EBE6E0] shadow-sm">
-            <span className="text-sm text-[#4A4238]">Your Allowance:</span>
-            <span className="ml-2 text-2xl font-bold text-[#A38A63]">{allowance} USDC</span>
+          <div className="flex items-center gap-3 ml-auto">
+
+            {/* Allowance Pill */}
+            <div className="bg-white px-6 py-3 rounded-full border border-[#EBE6E0] shadow-sm">
+              <span className="text-sm text-[#4A4238]">
+                Your Allowance:
+              </span>
+
+              <span className="ml-2 text-2xl font-bold text-[#A38A63]">
+                {allowance} USDC
+              </span>
+            </div>
+
+            {/* Dashboard Button */}
+            <Link
+              href="/student/dashboard"
+              className="
+                group
+                flex items-center gap-2
+                px-5 py-3
+                rounded-2xl
+                bg-[#4A4238]
+                text-white
+                shadow-lg shadow-[#4A4238]/10
+                hover:bg-[#363028]
+                transition-all duration-300
+              "
+            >
+              <svg
+                className="w-4 h-4 opacity-80 group-hover:scale-110 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 13h8V3H3v10zm10 8h8V11h-8v10zm0-18v4h8V3h-8zM3 21h8v-6H3v6z"
+                />
+              </svg>
+
+              <span className="text-sm font-semibold tracking-wide">
+                Dashboard
+              </span>
+            </Link>
+
           </div>
         </div>
 

@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import ContractABI from '@/contracts/EduGrantVault.json';
 import { useWallet } from '@/context/WalletContext';
 import { Wallet } from 'ethers';
+import Link from 'next/link';
 
 export default function AdminDashboard() {
   const { account, signer } = useWallet();
@@ -106,19 +107,64 @@ export default function AdminDashboard() {
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#4A4238] tracking-tight mb-2">Admin Control Center</h1>
             <p className="text-[#8C8276] text-sm sm:text-base">Manage vendors & student allowances</p>
           </div>
+          <div className="flex items-center gap-3 ml-auto">
+
+          {/* Status Pill */}
           <div className="inline-flex items-center gap-2.5 bg-white px-4 py-2.5 rounded-full border border-[#EBE6E0] shadow-sm">
             {account ? (
               <>
                 <span className="w-2 h-2 rounded-full bg-[#7A9C59] animate-pulse"></span>
-                <span className="text-[11px] font-bold text-[#5C7A43] uppercase tracking-wider">Admin Connected</span>
+
+                <span className="text-[11px] font-bold text-[#5C7A43] uppercase tracking-wider">
+                  Admin Connected
+                </span>
               </>
             ) : (
               <>
                 <span className="w-2 h-2 rounded-full bg-[#9E473F]"></span>
-                <span className="text-[11px] font-bold text-[#9E473F] uppercase tracking-wider">Wallet Disconnected</span>
+
+                <span className="text-[11px] font-bold text-[#9E473F] uppercase tracking-wider">
+                  Wallet Disconnected
+                </span>
               </>
             )}
           </div>
+
+          {/* Dashboard Button */}
+          <Link
+            href="/admin/dashboard"
+            className="
+              group
+              flex items-center gap-2
+              px-5 py-2.5
+              rounded-2xl
+              bg-[#4A4238]
+              text-white
+              shadow-lg shadow-[#4A4238]/10
+              hover:bg-[#363028]
+              transition-all duration-300
+            "
+          >
+            <svg
+              className="w-4 h-4 opacity-80 group-hover:scale-110 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 13h8V3H3v10zm10 8h8V11h-8v10zm0-18v4h8V3h-8zM3 21h8v-6H3v6z"
+              />
+            </svg>
+
+            <span className="text-sm font-semibold tracking-wide">
+              Dashboard
+            </span>
+          </Link>
+
+        </div>
         </div>
 
         {/* Two Cards Grid */}

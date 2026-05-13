@@ -164,17 +164,76 @@ export default function DonorDashboard() {
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#4A4238] tracking-tight mb-2">Sponsor a Student</h1>
             <p className="text-[#8C8276] text-sm sm:text-base">Securely lock funds into the EduGrant Escrow.</p>
           </div>
-          <div className="inline-flex items-center gap-2.5 bg-white px-4 py-2.5 rounded-full border border-[#EBE6E0] shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-[#7A9C59] animate-pulse"></span>
-            <span className="text-[11px] font-bold text-[#5C7A43] uppercase tracking-wider">Wallet Connected</span>
+          {/* Action Buttons */}
+          <div className="flex items-center gap-3 ml-auto">
+            {/* AI Assistant Button */}
+            <Link
+              href="/donor/nlp"
+              className="
+                flex items-center gap-2
+                px-5 py-2.5
+                bg-white
+                border border-[#A38A63]/20
+                text-[#A38A63]
+                rounded-2xl
+                hover:bg-[#F5F0E6]
+                hover:border-[#A38A63]/40
+                shadow-sm
+                transition-all duration-300
+              "
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                />
+              </svg>
+
+              <span className="text-sm font-medium">
+                AI Assistant
+              </span>
+            </Link>
+            {/* Dashboard Button */}
+            <Link
+              href="/donor/dashboard"
+              className="
+                group
+                flex items-center gap-2
+                px-5 py-2.5
+                rounded-2xl
+                bg-[#4A4238]
+                text-white
+                shadow-lg shadow-[#4A4238]/10
+                hover:bg-[#3A342E]
+                transition-all duration-300
+              "
+            >
+              <svg
+                className="w-4 h-4 opacity-80 group-hover:scale-110 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 13h8V3H3v10zm10 8h8V11h-8v10zm0-18v4h8V3h-8zM3 21h8v-6H3v6z"
+                />
+              </svg>
+
+              <span className="text-sm font-semibold tracking-wide">
+                Dashboard
+              </span>
+            </Link>
           </div>
-          {/* AI Assistant Button */}
-          <Link href="/donor/nlp" className="flex items-center gap-2 px-4 py-2 bg-white border border-[#A38A63] text-[#A38A63] rounded-xl hover:bg-[#F5F0E6] transition-all ml-auto">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-            </svg>
-            <span className="text-sm font-medium">AI Assistant</span>
-          </Link>
         </div>
 
         {/* Balance Card */}

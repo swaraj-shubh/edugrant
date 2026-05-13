@@ -81,18 +81,31 @@ export default function Navbar() {
             ))}
           </div>
 
+          {/* a horizontal line to seperate left and right nav buttons */}
+          <div className="hidden lg:block w-px h-6 bg-[#AC9362]/80"></div>
+
           {/* RIGHT SIDE */}
           <div className="flex items-center gap-4">
             {/* Dashboard pill */}
             <Link
               href={
                 account
-                  ? "/student/dashboard"
+                  ? "/register"
                   : "/"
               }
               className="hidden md:flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/30 border border-white/20 text-[#6B6158] hover:bg-white/50 transition-all text-sm font-semibold"
             >
-              Dashboard
+              Register
+            </Link>
+            <Link
+              href={
+                account
+                  ? "/profile"
+                  : "/"
+              }
+              className="hidden md:flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/30 border border-white/20 text-[#6B6158] hover:bg-white/50 transition-all text-sm font-semibold"
+            >
+              Profile
             </Link>
 
             {/* Wallet Button */}
