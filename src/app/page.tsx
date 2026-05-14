@@ -479,7 +479,7 @@ export default function HomePage() {
         </section>
 
         {/* CTA */}
-        <section className="py-32 px-6 bg-[#4A4238] relative overflow-hidden">
+        <section className="py-33 px-6 bg-[#4A4238] relative overflow-hidden">
           <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "repeating-linear-gradient(45deg, #A38A63 0, #A38A63 1px, transparent 0, transparent 50%)", backgroundSize: "20px 20px" }} />
           <div className="max-w-4xl mx-auto text-center relative z-10">
             <FadeUp><span className="text-xs font-semibold text-[#A38A63] dm uppercase tracking-widest">Join the Movement</span></FadeUp>

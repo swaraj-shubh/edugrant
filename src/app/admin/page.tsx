@@ -133,17 +133,7 @@ export default function AdminDashboard() {
           {/* Dashboard Button */}
           <Link
             href="/admin/dashboard"
-            className="
-              group
-              flex items-center gap-2
-              px-5 py-2.5
-              rounded-2xl
-              bg-[#4A4238]
-              text-white
-              shadow-lg shadow-[#4A4238]/10
-              hover:bg-[#363028]
-              transition-all duration-300
-            "
+            className="group flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#4A4238] text-white shadow-lg shadow-[#4A4238]/10 hover:bg-[#363028] transition-all duration-300"
           >
             <svg
               className="w-4 h-4 opacity-80 group-hover:scale-110 transition-transform"

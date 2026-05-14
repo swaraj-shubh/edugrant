@@ -34,8 +34,7 @@ export default function Navbar() {
         className="w-full max-w-7xl"
       >
         <div
-          className="
-            flex items-center justify-between px-6 md:px-8 h-20 rounded-[2rem] border border-white/20 shadow-2xl backdrop-blur-2xl"
+          className="flex items-center justify-between px-6 md:px-8 h-20 rounded-[2rem] border border-white/20 shadow-2xl backdrop-blur-2xl"
           style={{
             background:
               "linear-gradient(to bottom right, rgba(255,255,255,0.72), rgba(255,255,255,0.42))",
@@ -53,6 +52,7 @@ export default function Navbar() {
                 alt="EduGrant"
                 width={40}
                 height={40}
+                style={{ width: 'auto', height: 'auto' }}
                 className="relative z-10 transition-transform duration-500 group-hover:scale-110"
               />
             </div>

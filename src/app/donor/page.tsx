@@ -169,18 +169,7 @@ export default function DonorDashboard() {
             {/* AI Assistant Button */}
             <Link
               href="/donor/nlp"
-              className="
-                flex items-center gap-2
-                px-5 py-2.5
-                bg-white
-                border border-[#A38A63]/20
-                text-[#A38A63]
-                rounded-2xl
-                hover:bg-[#F5F0E6]
-                hover:border-[#A38A63]/40
-                shadow-sm
-                transition-all duration-300
-              "
+              className="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#A38A63]/20 text-[#A38A63] rounded-2xl hover:bg-[#F5F0E6] hover:border-[#A38A63]/40 shadow-sm transition-all duration-300"
             >
               <svg
                 className="w-5 h-5"
@@ -203,17 +192,7 @@ export default function DonorDashboard() {
             {/* Dashboard Button */}
             <Link
               href="/donor/dashboard"
-              className="
-                group
-                flex items-center gap-2
-                px-5 py-2.5
-                rounded-2xl
-                bg-[#4A4238]
-                text-white
-                shadow-lg shadow-[#4A4238]/10
-                hover:bg-[#3A342E]
-                transition-all duration-300
-              "
+              className="group flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#4A4238] text-white shadow-lg shadow-[#4A4238]/10 hover:bg-[#3A342E] transition-all duration-300"
             >
               <svg
                 className="w-4 h-4 opacity-80 group-hover:scale-110 transition-transform"
