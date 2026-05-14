@@ -16,8 +16,8 @@ interface Message {
 }
 
 export default function NLPDonorPage() {
-    console.log("NLPDonorPage rendered. Wallet connected:", !!useWallet().account);
-    console.log("Gemini API Key available:", process.env.GEMINI_API_KEY);
+  console.log("NLPDonorPage rendered. Wallet connected:", !!useWallet().account);
+  console.log("Gemini API Key available:", process.env.GEMINI_API_KEY);
   const { account, signer } = useWallet();
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -195,7 +195,7 @@ export default function NLPDonorPage() {
 
   if (!account) {
     return (
-      <div className="min-h-screen bg-[#FDFCF8] flex items-center justify-center px-4">
+      <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] flex items-center justify-center px-4">
         <div className="bg-white p-10 rounded-2xl shadow-sm border text-center max-w-md">
           <h2 className="text-2xl font-bold text-[#4A4238] mb-2">Connect Wallet</h2>
           <p className="text-[#8C8276]">Please connect your donor wallet to use the AI assistant.</p>
@@ -205,14 +205,14 @@ export default function NLPDonorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6">
+    <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] pt-12  px-5 sm:px-6">
       <div className="max-w-3xl mx-auto">
         <div className="mb-6">
           <h1 className="text-3xl font-extrabold text-[#4A4238]">AI Donation Assistant</h1>
           <p className="text-[#8C8276] mt-1">Natural language donations – just type or speak</p>
         </div>
 
-        <div className="bg-white rounded-2xl border border-[#EBE6E0] shadow-sm overflow-hidden flex flex-col h-[600px]">
+        <div className="bg-white rounded-2xl border border-[#EBE6E0] shadow-sm overflow-hidden flex flex-col h-[450px]">
           {/* Messages area */}
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
             <AnimatePresence>

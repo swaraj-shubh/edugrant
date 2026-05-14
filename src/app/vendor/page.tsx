@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function VendorPage() {
   return (
-    <div className="min-h-screen bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6 flex items-center justify-center">
+    <div className="min-h-screen bg-[#FDFCF8] -mt-20 pt-12 pb-20 px-4 sm:px-6 flex items-center justify-center">
       <div className="max-w-2xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -61,7 +61,7 @@ export default function VendorDashboard() {
 
   if (!account) {
     return (
-      <div className="min-h-screen bg-[#FDFCF8] flex items-center justify-center">
+      <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] flex items-center justify-center">
         <div className="bg-white p-10 rounded-2xl shadow-sm border max-w-md text-center">
           <h2 className="text-2xl font-bold text-[#4A4238] mb-2">Connect Wallet</h2>
           <p className="text-[#8C8276]">Please connect your vendor wallet.</p>
@@ -72,7 +72,7 @@ export default function VendorDashboard() {
 
   if (isWhitelisted === false) {
     return (
-      <div className="min-h-screen bg-[#FDFCF8] flex items-center justify-center">
+      <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] flex items-center justify-center">
         <div className="bg-white p-10 rounded-2xl shadow-sm border max-w-md text-center">
           <svg className="w-16 h-16 text-[#9E473F] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -85,7 +85,7 @@ export default function VendorDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6">
+    <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>

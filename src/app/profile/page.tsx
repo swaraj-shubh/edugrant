@@ -44,7 +44,7 @@ export default function ProfilePage() {
     try {
       const res = await fetch(`/api/profile?wallet=${account}`);
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to fetch profile');
+      // if (!res.ok) throw new Error(data.error || 'Failed to fetch profile');
       setProfile(data.user);
       setFormData(data.user);
     } catch (err: any) {
@@ -145,7 +145,7 @@ export default function ProfilePage() {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-[#FDFCF8] pt-20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#FDFCF8] pt-20 -mt-20 flex items-center justify-center px-4">
         <div className="bg-white p-8 rounded-2xl border border-[#EBE6E0] shadow-sm text-center max-w-md">
           <h2 className="text-2xl font-bold text-[#4A4238] mb-2">No Profile Found</h2>
           <p className="text-[#8C8276] mb-6">You haven't registered yet. Please complete registration first.</p>
@@ -161,7 +161,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6">
+    <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] pt-12 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

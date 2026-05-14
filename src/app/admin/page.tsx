@@ -9,33 +9,7 @@ import Link from 'next/link';
 export default function AdminDashboard() {
   const { account, signer } = useWallet();
 
-  // Inside the component, after: const { account, signer } = useWallet();
   const adminWallet = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS;
-  if (!account) {
-    return (
-      <div className="min-h-screen bg-[#FDFCF8] flex items-center justify-center">
-        <div className="bg-white p-10 rounded-2xl shadow-sm border max-w-md text-center">
-          <h2 className="text-2xl font-bold text-[#4A4238] mb-2">Connect Wallet</h2>
-          <p className="text-[#8C8276]">Please connect your ADMIN wallet.</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (account && adminWallet && account.toLowerCase() !== adminWallet.toLowerCase()) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] bg-[#FDFCF8]">
-        <div className="bg-white p-10 rounded-2xl shadow-sm border border-[#EBE6E0] text-center max-w-md w-full">
-          <svg className="w-16 h-16 text-[#D6CEC4] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-          </svg>
-          <h2 className="text-2xl font-bold text-[#4A4238] mb-2">Access Denied</h2>
-          <p className="text-[#8C8276]">Only the admin wallet is allowed to view this page.</p>
-          <p className="text-xs text-[#8C8276] mt-4 break-all">Admin address: {adminWallet}</p>
-        </div>
-      </div>
-    );
-  }
 
   const [vendorAddress, setVendorAddress] = useState('');
   const [revokeAddress, setRevokeAddress] = useState('');
@@ -98,8 +72,34 @@ export default function AdminDashboard() {
     setLoadingRevoke(false);
   };
 
+    if (!account) {
+    return (
+      <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] flex items-center justify-center">
+        <div className="bg-white p-10 rounded-2xl shadow-sm border max-w-md text-center">
+          <h2 className="text-2xl font-bold text-[#4A4238] mb-2">Connect Wallet</h2>
+          <p className="text-[#8C8276]">Please connect your ADMIN wallet.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (account && adminWallet && account.toLowerCase() !== adminWallet.toLowerCase()) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] bg-[#FDFCF8]">
+        <div className="bg-white p-10 rounded-2xl shadow-sm border border-[#EBE6E0] text-center max-w-md w-full">
+          <svg className="w-16 h-16 text-[#D6CEC4] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          <h2 className="text-2xl font-bold text-[#4A4238] mb-2">Access Denied</h2>
+          <p className="text-[#8C8276]">Only the admin wallet is allowed to view this page.</p>
+          <p className="text-xs text-[#8C8276] mt-4 break-all">Admin address: {adminWallet}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6">
+    <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-10">

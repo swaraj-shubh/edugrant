@@ -93,7 +93,7 @@ export default function RegisterPage() {
 
   if (!account) {
     return (
-      <div className="min-h-screen bg-[#FDFCF8] pt-20 flex items-center justify-center px-4">
+      <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] flex items-center justify-center px-4">
         <div className="bg-white p-8 rounded-2xl border border-[#EBE6E0] shadow-sm text-center max-w-md">
           <svg className="w-16 h-16 text-[#A38A63] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -106,7 +106,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6">
+    <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] pt-20 pb-20 px-4 sm:px-6">
       <div className="max-w-2xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

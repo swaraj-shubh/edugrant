@@ -96,7 +96,7 @@ export default function StudentSpendPage() {
 
   if (!account) {
     return (
-      <div className="min-h-screen bg-[#FDFCF8] flex items-center justify-center">
+      <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] flex items-center justify-center">
         <div className="bg-white p-10 rounded-2xl shadow-sm border max-w-md text-center">
           <h2 className="text-2xl font-bold text-[#4A4238] mb-2">Connect Wallet</h2>
           <p className="text-[#8C8276]">Please connect your student wallet.</p>
@@ -106,7 +106,7 @@ export default function StudentSpendPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6">
+    <div className="min-h-[calc(100vh-80px)] bg-[#FDFCF8] pt-12 pb-20 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto">
         {/* Header + Balance */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
